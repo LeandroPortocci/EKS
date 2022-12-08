@@ -101,4 +101,8 @@ jobs:
           aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+          account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+          repo: leandroportocci/aleyant-demo:dev
+          cluster_name: demo-eks-5inaZKJu
+          kubectl_command: deploy -f deploy.yaml  
 
