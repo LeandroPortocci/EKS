@@ -103,31 +103,24 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           account_id: ${{ secrets.AWS_ACCOUNT_ID }}
           cluster_name: ${{ secrets.EKS_CLUSTER_NAME }}
-
-  deploy_to_cluster:
-    name: Deploy to cluster
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: Validate connection AWS
-      uses: qazz92/kubectl@1.0.3
-      env:
-        kube_confg_data: ${{ secrets.KUBE_CONFIG_DATA }}
-        aws_access_key_id: ${{ secrets.ACCESS_KEY_ID }}
-        aws_secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
-        aws_region: ${{ secrets.AWS_REGION }}
-
+      - name: Validate connection AWS
+        uses: qazz92/kubectl@1.0.3
+        env:
+          kube_confg_data: ${{ secrets.KUBE_CONFIG_DATA }}
+          aws_access_key_id: ${{ secrets.ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
       # Deploy the app using kubernetes (deploy.yml)
-    - name: Deploy to EKS
-        # To run kubectl commands against a cluster created in Cloud Console, 
-        # from another computer, or by another member of the project, 
-        # you need to generate a kubeconfig entry in your environment...
-      run: |
-          gcloud config set project ${{ secrets.GCP_PROJECT }}
-          gcloud config set compute/zone us-central1-c
-          gcloud container clusters get-credentials node-demo-k8s
-          kubectl apply -f deploy.yml
-          envsubst < deploy.yml
-          envsubst < deploy.yml | kubectl apply -f -
-          kubectl rollout status -w deployment/nodejs-demo-app
-          kubectl get all
+      - name: Deploy to EKS
+          # To run kubectl commands against a cluster created in Cloud Console, 
+          # from another computer, or by another member of the project, 
+          # you need to generate a kubeconfig entry in your environment...
+        run: |
+            gcloud config set project ${{ secrets.GCP_PROJECT }}
+            gcloud config set compute/zone us-central1-c
+            gcloud container clusters get-credentials node-demo-k8s
+            kubectl apply -f deploy.yml
+            envsubst < deploy.yml
+            envsubst < deploy.yml | kubectl apply -f -
+            kubectl rollout status -w deployment/nodejs-demo-app
+            kubectl get all
