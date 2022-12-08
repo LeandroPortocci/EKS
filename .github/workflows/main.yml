@@ -103,8 +103,29 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           account_id: ${{ secrets.AWS_ACCOUNT_ID }}
           cluster_name: ${{ secrets.EKS_CLUSTER_NAME }}
-        with:
-          args: |
-            kubectl set image deployment deploy.yml 
-        ##    $K8S_DEPLOYMENT=$DOCKER_IMAGE:$DOCKER_TAG &&
-            kubectl rollout status deployment/deploy.yml
+
+name: deploy
+jobs:
+  deploy:
+    name: Deploy to cluster
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: deploy to cluster
+      uses: qazz92/kubectl@1.0.3
+      env:
+        kube_confg_data: ${{ secrets.KUBE_CONFIG_DATA }}
+        aws_access_key_id: ${{ secrets.ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws_region: ${{ secrets.AWS_REGION }}
+      with:
+        args: set image --record deployment/${{ secrets.DOCKERHUB_USERNAME }}/aleyant-demo:dev
+    - name: verify deployment
+      uses: qazz92/kubectl@1.0.3
+      env:
+        kube_confg_data: ${{ secrets.KUBE_CONFIG_DATA }}
+        aws_access_key_id: ${{ secrets.ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+        aws_region: ${{ secrets.AWS_REGION }}
+      with:
+        args: '"rollout status deployment/${{ secrets.DOCKERHUB_USERNAME }}/aleyant-demo:dev"'
