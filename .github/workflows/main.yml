@@ -102,7 +102,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           account_id: ${{ secrets.AWS_ACCOUNT_ID }}
-          repo: leandroportocci/aleyant-demo:dev
-          cluster_name: demo-eks-5inaZKJu
-          kubectl_command: deploy -f deploy.yaml  
-
+          cluster_name: ${{ secrets.EKS_CLUSTER_NAME }}
+        with:
+          args: |
+            kubectl set image deployment deploy.yml 
+        ##    $K8S_DEPLOYMENT=$DOCKER_IMAGE:$DOCKER_TAG &&
+            kubectl rollout status deployment/deploy.yml
