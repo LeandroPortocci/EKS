@@ -109,6 +109,6 @@ jobs:
           # from another computer, or by another member of the project, 
           # you need to generate a kubeconfig entry in your environment...
         run: |
-            aws eks update-kubeconfig -name ${{ secrets.EKS_CLUSTER_NAME }} -profile default
+            aws eks update-kubeconfig -name demo-aws-eks -profile default
             kubectl apply -f deploy.yml
             kubectl get all
