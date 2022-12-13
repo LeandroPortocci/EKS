@@ -4,7 +4,6 @@ phases:
   commands:
    - echo Logging to AWS ECR…
    — aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y5m5n1r0
-
  pre_build: # Add kubeconfig to access to EKS cluster
   commands:
    — echo Update kubeconfig…
