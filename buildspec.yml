@@ -2,15 +2,6 @@ version: 0.2
 phases:
  install: # Install AWS cli, kubectl (needed for Helm) and Helm
   commands:
-   — echo Set parameter
-   — REGION=us-east-2
-   — AWS_ACCOUNTID=118201352853
-   — ECR_NAME=[leandroportocci]
-   — COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1–7)
-   — IMAGE_TAG=${COMMIT_HASH:=latest}
-   — EKS_NAME=[demo-aws-eks]
-   — DEPLOYMENT_NAME=[site]
-   -REPOSITORY_URI=public.ecr.aws/y5m5n1r0/leandroportocci
    - echo Logging to AWS ECR…
    — aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y5m5n1r0
 
